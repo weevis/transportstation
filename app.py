@@ -1,5 +1,6 @@
 import os
-from flask import Flask
+import requests
+from flask import Flask, render_template, url_for, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ from models import History
 
 @app.route('/')
 def hello():
-    return "Hello World!"
+    return render_template('main_window/index.html')
 
 if __name__ == '__main__':
     app.run()
