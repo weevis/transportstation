@@ -8,6 +8,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+from models import History
+
 @app.route('/')
 def hello():
     return "Hello World!"
