@@ -3,6 +3,8 @@ import requests
 from flask import Flask, render_template, url_for, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from nzb import NZBParse
+
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -13,6 +15,17 @@ from models import History
 
 @app.route('/')
 def hello():
+    nzb_parse = NZBParse()
+    print 'Parse NZB From File\n'
+    nzb_parse.parseNZB(nzb_parse.readFromFile('static/theprojecthate.nzb'))
+    print 'End Parse NZB From File\n'
+
+    print 'Parse NZB From URL\n'
+    try:
+	    nzb_parse.parseNZB(nzb_parse.readFromURL('http://localhost:5000/static/theprojecthate.nzb'))
+    except InputError:
+    	print 'Crap.'
+
     return render_template('main_window/index.html')
 
 if __name__ == '__main__':
