@@ -15,19 +15,30 @@ def allowed_file(filename):
 @nzb_page.route('/nzb', methods=['POST'])
 def nzb():
 	if request.method == 'POST':
-		if 'filename' not in request.files:
-	            flash('No file part')
-                    return redirect(request.url)
-		file = request.files['filename']
+		files = request.files.getlist("filename")
+		if files:
+			for file in files:
+				end_file = secure_filename(file.filename)
+				f = os.path.join(current_app.config['UPLOAD_FOLDER'], end_file)
+				file.save(f)
 
-		if file.filename == '':
-		    flash('No selected file')
-		    return redirect(request.url)
-
-		if file and allowed_file(file.filename):
-			end_file = secure_filename(file.filename)
-			f = os.path.join(current_app.config['UPLOAD_FOLDER'], end_file )
-			file.save(f)
-			return redirect(url_for('hello') )
+			return redirect(url_for('hello'))
+		else:
+			flash('No selected files')
+			return redirect(request.url)
+#		if 'filename' not in request.files:
+#	            flash('No file part')
+#                    return redirect(request.url)
+#		file = request.files['filename']
+#
+#		if file.filename == '':
+#		    flash('No selected file')
+#		    return redirect(request.url)
+#
+#		if file and allowed_file(file.filename):
+#			end_file = secure_filename(file.filename)
+#			f = os.path.join(current_app.config['UPLOAD_FOLDER'], end_file )
+#			file.save(f)
+#			return redirect(url_for('hello') )
 	else:
 		return redirect(request.url)

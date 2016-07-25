@@ -19,7 +19,7 @@
 			    <form action="{{url_for('nzb.nzb')}}" method="POST" enctype="multipart/form-data">
 			    <div class="modal-body">
 					{{ uploadNZBForm.csrf_token }}
-					{{ uploadNZBForm.filename }}
+					{{ uploadNZBForm.filename(multiple="multiple") }}
 			    </div>
 			    <div class="modal-footer">
 			        <button type="submit" class="btn btn-primary">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
