@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+	<head>
+		{% block includes %}
+	        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	        <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+	        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<style>
+		html {
+		  position: relative;
+		  min-height: 100%;
+		}
+		body {
+		  /* Margin bottom by footer height */
+		  margin-bottom: 60px;
+		}
+		.footer {
+		 position: absolute;
+		 bottom: 0;
+		 /* Set the fixed height of the footer here */
+		  height: 60px;
+		  background-color: #f5f5f5;
+		}
+		@media (min-width: 768px) {
+		      #bs-navbar-collapse-1 {
+		      padding: 0 15px;
+		    }
+		}
+		</style>
+		{% endblock %}
+		<title>TransportStation - {% block title %}{% endblock %}</title>
+	</head>
+	<body>
+		<div class="container">
+		{% block nav %}
+            	<nav class="navbar navbar-default">
+	            <div class="container-fluid">
+		        <div class="navbar-header">
+		            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
+		                <span class="sr-only">Toggle navigation</span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		            </button>
+		            <a class="navbar-brand" href="#">TS</a>
+		        </div>
+                        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+			    <ul class="nav navbar-nav navbar-right">
+			        <li class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#uploadNZBModal">Upload NZB</li>
+			        <li>&nbsp;</li>
+			        <li class="btn btn-primary navbar-btn">Upload Torrent</li>
+			    </ul>
+			</div>
+		    </div>
+		</nav>
+		{% endblock %}
+		{% block content %}
+		{% endblock %}
+		{% block footer %}
+		<footer class="footer">
+		    <p class="text-muted">
+			<ul class="nav navbar-nav navbar-left">
+			    <li><a href="suck.it">Support Main</a></li>
+		        </ul>
+			<ul class="nav navbar-nav navbar-right">
+			    <li><a href="{{url_for('settings.admin_index')}}">Settings</a></li>
+			</ul>
+		    </p>
+	        </footer>
+		{% endblock %}
+		{% block hiddencontent %}
+		{% endblock %}
+		</div>
+	</body>
+</html>

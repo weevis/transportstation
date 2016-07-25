@@ -9,4 +9,3 @@ def admin_index():
 		return render_template('settings/index.html')
 	except TemplateNotFound:
 		abort(404)
-

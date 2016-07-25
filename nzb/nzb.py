@@ -42,5 +42,8 @@ class NZBParse:
 				print 'Subject: {} Date: {} Poster: {} Groups: {}\n'.format(nzb_file.subject, nzb_file.date, nzb_file.poster, nzb_file.groups)
 				for segment in nzb_file.segments:
 					print 'Segment: {} Message ID: {} Size: {}\n'.format(segment.number, segment.message_id, segment.bytes)
+
+			return nzb_files
+
 		except URLError, TypeError:
 			print "Error!"

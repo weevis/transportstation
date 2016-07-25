@@ -6,8 +6,11 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
+    CSRF_SESSION_KEY = "scorpionkingblues"
     SECRET_KEY = 'mimblybimblypimblypoo'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    BASE_DIR = basedir
+    UPLOAD_FOLDER = basedir + '/static/uploads/'
 
 class ProductionConfig(Config):
     DEBUG = False

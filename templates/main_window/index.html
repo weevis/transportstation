@@ -1,51 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>TransportStation</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">TS</a>
-                    </div>
-    
-                    <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="btn btn-primary navbar-btn">Sign In</li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
+{% extends "layout.html" %}
+	{% block title %}Index{% endblock %}
+	{% block content %}
             <div class="jumbotron">
-                spoopy
+                spoopy mcspoon
             </div>
-
-            <footer class="footer">
-                <p class="text-muted">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="suck.it">Support Main</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="http://www.suck.it">Suck.it</a></li>
-                    </ul>
-                </p>
-            </footer>
-        </div>
-    </body>
-</html>
+	{% endblock %}
+	{% block hiddencontent %}
+	      <!-- Modal -->
+	        <div class="modal fade" id="uploadNZBModal" role="dialog">
+		    <div class="modal-dialog">
+		        
+			<!-- Modal content-->
+			<div class="modal-content">
+			    <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Upload NZB</h4>
+			    </div>
+			    <form action="{{url_for('nzb.nzb')}}" method="POST" enctype="multipart/form-data">
+			    <div class="modal-body">
+					{{ uploadNZBForm.csrf_token }}
+					{{ uploadNZBForm.filename }}
+			    </div>
+			    <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			    </div>
+			    </form>
+			</div>
+		    </div>
+		</div>
+	{% endblock %}
