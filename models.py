@@ -1,4 +1,5 @@
 from app import db
+from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSON
 
 
