@@ -28,4 +28,47 @@
 			</div>
 		    </div>
 		</div>
+	<script type="text/javascript">
+		var files;
+		function prepareUpload(event)
+		{
+			files = event.target.files;
+		}
+
+		function uploadFiles(event)
+		{
+			event.stopPropagation();
+			event.preventDefault();
+
+			var fdata = new FormData();
+			$.each(files, function(key, value) {
+				fdata.append(key, value);
+			});
+			$.ajax({
+				url: "{{url_for('nzb.nzb')}}",
+				type: "POST",
+				method: "POST",
+				data: fdata,
+				cache: false,
+				processData: false,
+				contentType: false,
+				async: false,
+				success: function( data ) {
+                                        if( typeof data.error === 'undefined' )
+	                                        alert('success');
+	                                else
+		                                console.log("Errors: " + data.error );
+				},
+				error: function( jqXHR, textStatus, errorThrown ) {
+					console.log("Errors: " + textStatus );
+				}
+			});
+		}
+
+		$(document).ready( function() {
+			$('input[type=file]').on('change', prepareUpload);
+			$('form').on('submit', uploadFiles );
+
+		});
+	</script>
 	{% endblock %}
