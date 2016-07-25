@@ -13,7 +13,7 @@ app.register_blueprint(settings_page)
 app.register_blueprint(nzb_page)
 db = SQLAlchemy(app)
 
-from models import History
+from models import History, WorkQueue
 
 @app.route('/')
 def hello():

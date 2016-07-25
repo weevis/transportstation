@@ -26,3 +26,15 @@ class WorkQueue(db.Model):
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+class NZBFile(db.Model):
+    __tablename__ = 'nzbfile'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    field_data = db.Column(JSON)
+
+    def __init__(self, field_data):
+        self.field_data = field_data
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
