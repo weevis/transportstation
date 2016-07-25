@@ -14,3 +14,15 @@ class History(db.Model):
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+class WorkQueue(db.Model):
+    __tablename__ = "workQueue"
+
+    id = db.Column(db.Integer, primary_key=True)
+    field_data = db.Column(JSON)
+
+    def __init__(self, field_data):
+        self.field_data = field_data
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
