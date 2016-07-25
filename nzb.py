@@ -5,6 +5,9 @@ from flask_wtf.file import FileField, FileAllowed
 import os
 from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify
 from werkzeug.utils import secure_filename
+
+from app import app,db
+
 ALLOWED_EXTENSIONS = set(['nzb', 'torrent', 'magnet'])
 
 nzb_page = Blueprint('nzb', __name__, url_prefix='/nzb')
