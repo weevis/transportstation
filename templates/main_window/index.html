@@ -120,7 +120,7 @@
 							{
 								totalSize = totalSize + data.files[i].segments[j].bytes;
 							}
-							$('.jumbotron').append('<p>' + data.files[i].subjects[0] + ' - Segments: ' + data.files[i].numsegments + ' - Size: ' + formatBytes(totalSize) + '</p>');
+							$('.jumbotron').append('<p>' + data.files[i].basefilename + ' - Segments: ' + data.files[i].numsegments + ' - Size: ' + formatBytes(totalSize) + '</p>');
 							totalSize = 0;
 						}
 		                        }

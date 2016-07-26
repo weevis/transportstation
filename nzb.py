@@ -43,7 +43,7 @@ def nzb():
                 extension = get_extension(files.filename)
                 if( extension == NZB ):
                     nzb_parser = NZBParse()
-                    json_obj = nzb_parser.parseNZB(nzb_parser.readFromFile(f))
+                    json_obj = nzb_parser.parseNZB(nzb_parser.readFromFile(f, end_file))
                     filelist.append(json_obj)
                 if( extension == TORRENT or extension == MAGNET):
                     print "Torrent Found"
@@ -83,7 +83,7 @@ class NZBParse:
         print 'Output from URL: {}'.format(output)
         return output
 
-    def readFromFile(self, filename):
+    def readFromFile(self, filename, end_file):
         try:
             contents = open(filename)
             output = contents.read()
@@ -91,6 +91,7 @@ class NZBParse:
             output = None
 
         self.nzbfile['filename'] = filename
+	self.nzbfile['basefilename'] = end_file
 
         return output
 
@@ -107,17 +108,13 @@ class NZBParse:
 
             nzb_files = nzb_parser.parse(output)
 
+            sub_seg = []
             subjects = []
-            dates = []
-            posters = []
-            groups = []
             segments = []
+	    segments2 = []
 	    i = 0
             for nzb_file in nzb_files:
                 subjects.append(nzb_file.subject)
-                dates.append("{}".format(nzb_file.date))
-                posters.append(nzb_file.poster)
-                groups.append(nzb_file.groups)
                 for segment in nzb_file.segments:
 		    i = i + 1
                     tmpsegment = {}
@@ -125,11 +122,19 @@ class NZBParse:
                     tmpsegment['message_id'] = segment.message_id
                     tmpsegment['bytes'] = segment.bytes
                     segments.append(tmpsegment)
+		    segments2.append(tmpsegment)
+		d = {}
+		segs = list(segments2)
+		d['subject'] = nzb_file.subject
+		d['segments'] = segs
+		d['dates'] = '{}'.format(nzb_file.date)
+		d['posters'] = '{}'.format(nzb_file.poster)
+		d['groups'] = '{}'.format(nzb_file.groups)
+		sub_seg.append(d)
+		del segments2[:]
 
+            self.nzbfile['sub_seg'] = sub_seg
             self.nzbfile['subjects'] = subjects
-            self.nzbfile['dates'] = dates
-            self.nzbfile['posters'] = posters
-            self.nzbfile['groups'] = groups
             self.nzbfile['segments'] = segments
 	    self.nzbfile['numsegments'] = i
             return self.nzbfile
