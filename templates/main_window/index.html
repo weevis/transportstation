@@ -23,7 +23,6 @@
 
 	{% block content %}
             <div class="jumbotron">
-                spoopy mcspoon
             </div>
 	{% endblock %}
 	{% block hiddencontent %}
@@ -87,8 +86,7 @@
 							var max = e.total;
 							var current = e.loaded;
 							var Percentage = (current * 100)/max;
-							$('.progress-bar').css('width', Percentage+'%').attr('aria-valuenow', Percentage); 
-							console.log(Percentage);
+							$('.progress-bar').css('width', Percentage+'%').attr('aria-valuenow', Percentage);
 						}
 					};
 					return xhr;
@@ -103,7 +101,9 @@
 						var $el = $('#filename');
 						$el.wrap('<form>').closest('form').get(0).reset();
 						$el.unwrap();
-			                        alert('success');
+						console.log(data);
+						for( i = 0; i < data.files.length; i++ )
+							$('.jumbotron').append('<p>' + data.files[i].subjects[0] + ' - Segments: ' + data.files[i].numsegments + '</p>');
 		                        }
 		                       else
 		 	                      console.log("Some error");
@@ -117,6 +117,9 @@
 		$(document).ready( function() {
 			$('input[type=file]').on('change', prepareUpload);
 			$('form').on('submit', uploadFiles );
+			$('#closebtn').on('click', function(event) {
+				$('.progress-bar').css('width', 0+'%').attr('aria-valuenow', 0);
+			});
 		});
 	</script>
 	{% endblock %}

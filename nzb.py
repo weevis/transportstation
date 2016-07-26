@@ -32,7 +32,9 @@ def nzb():
     filelist = []
     fs = {}
     if request.method == 'POST':
+        i = 0
         for k in request.files:
+	    i = i + 1
             files = request.files[k]
             if files and allowed_file(files.filename):
                 end_file = secure_filename(files.filename)
@@ -43,11 +45,11 @@ def nzb():
                     nzb_parser = NZBParse()
                     json_obj = nzb_parser.parseNZB(nzb_parser.readFromFile(f))
                     filelist.append(json_obj)
-                    print "NZB Found"
                 if( extension == TORRENT or extension == MAGNET):
                     print "Torrent Found"
         fs['files'] = filelist
         fs['success'] = True
+	fs['numfiles'] = i
         return jsonify(fs)
 
 
@@ -110,25 +112,26 @@ class NZBParse:
             posters = []
             groups = []
             segments = []
+	    i = 0
             for nzb_file in nzb_files:
-#                print 'Subject: {} Date: {} Poster: {} Groups: {}\n'.format(nzb_file.subject, nzb_file.date, nzb_file.poster, nzb_file.groups)
                 subjects.append(nzb_file.subject)
                 dates.append("{}".format(nzb_file.date))
                 posters.append(nzb_file.poster)
                 groups.append(nzb_file.groups)
                 for segment in nzb_file.segments:
+		    i = i + 1
                     tmpsegment = {}
                     tmpsegment['number'] = segment.number
                     tmpsegment['message_id'] = segment.message_id
                     tmpsegment['bytes'] = segment.bytes
                     segments.append(tmpsegment)
-#                    print 'Segment: {} Message ID: {} Size: {}\n'.format(segment.number, segment.message_id, segment.bytes)
 
             self.nzbfile['subjects'] = subjects
             self.nzbfile['dates'] = dates
             self.nzbfile['posters'] = posters
             self.nzbfile['groups'] = groups
             self.nzbfile['segments'] = segments
+	    self.nzbfile['numsegments'] = i
             return self.nzbfile
 
         except URLError, TypeError:
