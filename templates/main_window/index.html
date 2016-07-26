@@ -47,7 +47,7 @@
 				<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
 				</div>
 				</div>
-			        <button type="submit" class="btn btn-primary">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal" id="closebtn">Close</button>
+			        <button type="submit" class="btn btn-primary" id="submitbtn">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal" id="closebtn">Close</button>
 			    </div>
 			    </form>
 			</div>
@@ -57,6 +57,8 @@
 		var files;
 		function prepareUpload(event)
 		{
+			$('.progress-bar').css('width', 0+'%').attr('aria-valuenow', 0);
+			$('#submitbtn').html('Submit');
 			files = event.target.files;
 		}
 
@@ -75,7 +77,7 @@
 				method: "POST",
 				data: fdata,
 				beforeSend: function() {
-					$('.progress-bar').css('width', 0+'%').attr('aria-valuenow', 0);
+					$('#submitbtn').html('Uploading');
 				},
 				xhr: function() {
 					var xhr = $.ajaxSettings.xhr();
@@ -97,6 +99,7 @@
 				success: function( data ) {
 			                if( data.success == true )
                     			{
+						$('#submitbtn').html('Submit');
 						var $el = $('#filename');
 						$el.wrap('<form>').closest('form').get(0).reset();
 						$el.unwrap();
