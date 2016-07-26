@@ -53,7 +53,9 @@ def nzb():
     	fs['numfiles'] = i
         jsondump = json.dumps(fs)
         nzbfile = NZBFile()
-        nzbfile.addToWorkQueue(jsondump)
+        id = nzbfile.addToWorkQueue(jsondump)
+        fs['id'] = id
+
         return jsonify(fs)
 
 
@@ -161,3 +163,5 @@ class NZBFile:
         wq = WorkQueue(nzb_json)
         db.session.add(wq)
         db.session.commit()
+
+        return wq.id

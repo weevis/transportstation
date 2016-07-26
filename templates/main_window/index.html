@@ -30,6 +30,7 @@
                                 <th>Filename</th>
                                 <th>Segments</th>
                                 <th>Size</th>
+                                <th>ID</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,7 +129,7 @@
 						console.log(data);
 						for( i = 0; i < data.files.length; i++ )
 						{
-                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td></tr>');
+                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td><td>' + data.id + '</td></tr>');
 						}
 		                        }
 		                       else
