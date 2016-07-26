@@ -41,9 +41,13 @@
 			    <div class="modal-body">
 					{{ uploadNZBForm.csrf_token }}
 					{{ uploadNZBForm.filename(multiple="multiple") }}
-			    </div>
+ 			    </div>
 			    <div class="modal-footer">
-			        <button type="submit" class="btn btn-primary">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        <div class="progress progress-striped active">
+				<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+				</div>
+				</div>
+			        <button type="submit" class="btn btn-primary">Submit</button>&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal" id="closebtn">Close</button>
 			    </div>
 			    </form>
 			</div>
@@ -70,17 +74,36 @@
 				type: "POST",
 				method: "POST",
 				data: fdata,
+				beforeSend: function() {
+					$('.progress-bar').css('width', 0+'%').attr('aria-valuenow', 0);
+				},
+				xhr: function() {
+					var xhr = $.ajaxSettings.xhr();
+					xhr.upload.onprogress = function(e) {
+						if(e.lengthComputable)
+						{
+							var max = e.total;
+							var current = e.loaded;
+							var Percentage = (current * 100)/max;
+							$('.progress-bar').css('width', Percentage+'%').attr('aria-valuenow', Percentage); 
+							console.log(Percentage);
+						}
+					};
+					return xhr;
+				},
 				cache: false,
 				processData: false,
 				contentType: false,
-				async: false,
 				success: function( data ) {
-                    if( data.success == true )
-                    {
-                        alert('success');
-                    }
-                    else
-                        console.log("Some error");
+			                if( data.success == true )
+                    			{
+						var $el = $('#filename');
+						$el.wrap('<form>').closest('form').get(0).reset();
+						$el.unwrap();
+			                        alert('success');
+		                        }
+		                       else
+		 	                      console.log("Some error");
 				},
 				error: function( data) {
 					console.log("Errors");
@@ -91,7 +114,6 @@
 		$(document).ready( function() {
 			$('input[type=file]').on('change', prepareUpload);
 			$('form').on('submit', uploadFiles );
-
 		});
 	</script>
 	{% endblock %}
