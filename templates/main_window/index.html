@@ -61,6 +61,17 @@
 			files = event.target.files;
 		}
 
+		function formatBytes(bytes,decimals) 
+		{
+ 			if(bytes == 0) return '0 Byte';
+
+      			var k = 1000; // or 1024 for binary
+         		var dm = decimals + 1 || 3;
+	    		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+	       		var i = Math.floor(Math.log(bytes) / Math.log(k));
+	          	return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+		}
+
 		function uploadFiles(event)
 		{
 			event.stopPropagation();
@@ -97,13 +108,21 @@
 				success: function( data ) {
 			                if( data.success == true )
                     			{
+						var totalSize = 0;
 						$('#submitbtn').html('Submit');
 						var $el = $('#filename');
 						$el.wrap('<form>').closest('form').get(0).reset();
 						$el.unwrap();
 						console.log(data);
 						for( i = 0; i < data.files.length; i++ )
-							$('.jumbotron').append('<p>' + data.files[i].subjects[0] + ' - Segments: ' + data.files[i].numsegments + '</p>');
+						{
+							for( j = 0; j < data.files[i].segments.length; j++ )
+							{
+								totalSize = totalSize + data.files[i].segments[j].bytes;
+							}
+							$('.jumbotron').append('<p>' + data.files[i].subjects[0] + ' - Segments: ' + data.files[i].numsegments + ' - Size: ' + formatBytes(totalSize) + '</p>');
+							totalSize = 0;
+						}
 		                        }
 		                       else
 		 	                      console.log("Some error");
