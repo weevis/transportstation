@@ -12,8 +12,6 @@ class History(db.Model):
     def __init__(self, field_data):
         self.field_data = field_data
 
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
 
 class WorkQueue(db.Model):
     __tablename__ = "workQueue"
@@ -24,8 +22,6 @@ class WorkQueue(db.Model):
     def __init__(self, field_data):
         self.field_data = field_data
 
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
 
 class NZBFile(db.Model):
     __tablename__ = 'nzbfile'
@@ -36,5 +32,3 @@ class NZBFile(db.Model):
     def __init__(self, field_data):
         self.field_data = field_data
 
-    def __repr__(self):
-        return '<id {}>'.format(self.id)

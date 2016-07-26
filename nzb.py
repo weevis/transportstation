@@ -3,7 +3,8 @@ from urllib2 import urlopen, URLError
 from flask_wtf import Form
 from flask_wtf.file import FileField, FileAllowed
 import os
-from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify
+import time
+from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify, json
 from werkzeug.utils import secure_filename
 
 from app import app,db
@@ -49,7 +50,10 @@ def nzb():
                     print "Torrent Found"
         fs['files'] = filelist
         fs['success'] = True
-	fs['numfiles'] = i
+    	fs['numfiles'] = i
+        jsondump = json.dumps(fs)
+        nzbfile = NZBFile()
+        nzbfile.addToWorkQueue(jsondump)
         return jsonify(fs)
 
 
@@ -91,8 +95,9 @@ class NZBParse:
             output = None
 
         self.nzbfile['filename'] = filename
-	self.nzbfile['basefilename'] = end_file
-
+        self.nzbfile['basefilename'] = end_file
+        self.nzbfile['finished'] = False
+        self.nzbfile['added'] = time.time()
         return output
 
     def process_nzb(self, filename):
@@ -111,33 +116,48 @@ class NZBParse:
             sub_seg = []
             subjects = []
             segments = []
-	    segments2 = []
-	    i = 0
+            segments2 = []
+            i = 0
+            totalBytes = 0
             for nzb_file in nzb_files:
                 subjects.append(nzb_file.subject)
                 for segment in nzb_file.segments:
-		    i = i + 1
+                    i = i + 1
                     tmpsegment = {}
                     tmpsegment['number'] = segment.number
                     tmpsegment['message_id'] = segment.message_id
                     tmpsegment['bytes'] = segment.bytes
+                    totalBytes = totalBytes + segment.bytes
                     segments.append(tmpsegment)
-		    segments2.append(tmpsegment)
-		d = {}
-		segs = list(segments2)
-		d['subject'] = nzb_file.subject
-		d['segments'] = segs
-		d['dates'] = '{}'.format(nzb_file.date)
-		d['posters'] = '{}'.format(nzb_file.poster)
-		d['groups'] = '{}'.format(nzb_file.groups)
-		sub_seg.append(d)
-		del segments2[:]
+                    segments2.append(tmpsegment)
+
+                d = {}
+                segs = list(segments2)
+                d['subject'] = nzb_file.subject
+                d['segments'] = segs
+                d['dates'] = '{}'.format(nzb_file.date)
+                d['posters'] = '{}'.format(nzb_file.poster)
+                d['groups'] = '{}'.format(nzb_file.groups)
+                sub_seg.append(d)
+                del segments2[:]
 
             self.nzbfile['sub_seg'] = sub_seg
             self.nzbfile['subjects'] = subjects
             self.nzbfile['segments'] = segments
-	    self.nzbfile['numsegments'] = i
+            self.nzbfile['numsegments'] = i
+            self.nzbfile['totalbytes'] = totalBytes
             return self.nzbfile
 
         except URLError, TypeError:
             return jsonify({"success":False})
+
+class NZBFile:
+    nzb_json = None
+
+    def __init__(self):
+        self.nzb_json = None
+
+    def addToWorkQueue(self, nzb_json):
+        wq = WorkQueue(nzb_json)
+        db.session.add(wq)
+        db.session.commit()
