@@ -23,7 +23,7 @@ class WorkQueue(db.Model):
         self.field_data = field_data
 
 
-class NZBFile(db.Model):
+class NZBFiles(db.Model):
     __tablename__ = 'nzbfile'
     
     id = db.Column(db.Integer, primary_key=True)

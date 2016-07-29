@@ -19,7 +19,7 @@ TORRENT = "torrent"
 MAGNET = "magnet"
 NZB = "nzb"
 
-from models import History, WorkQueue, NZBFile
+from models import History, WorkQueue, NZBFiles
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -100,6 +100,10 @@ class NZBParse:
         self.nzbfile['basefilename'] = end_file
         self.nzbfile['finished'] = False
         self.nzbfile['added'] = time.time()
+        nz = NZBFiles(json.dumps(self.nzbfile))
+        db.session.add(nz)
+        db.session.commit()
+        self.nzbfile['file_id'] = nz.id
         return output
 
     def process_nzb(self, filename):
@@ -117,7 +121,6 @@ class NZBParse:
 
             sub_seg = []
             subjects = []
-            segments = []
             segments2 = []
             i = 0
             totalBytes = 0
@@ -130,7 +133,6 @@ class NZBParse:
                     tmpsegment['message_id'] = segment.message_id
                     tmpsegment['bytes'] = segment.bytes
                     totalBytes = totalBytes + segment.bytes
-                    segments.append(tmpsegment)
                     segments2.append(tmpsegment)
 
                 d = {}
@@ -144,8 +146,6 @@ class NZBParse:
                 del segments2[:]
 
             self.nzbfile['sub_seg'] = sub_seg
-            self.nzbfile['subjects'] = subjects
-            self.nzbfile['segments'] = segments
             self.nzbfile['numsegments'] = i
             self.nzbfile['totalbytes'] = totalBytes
             return self.nzbfile

@@ -22,6 +22,7 @@
         {% endblock %}
 
 	{% block content %}
+            <h2>Downloading</h2>
             <div class="well well-lg" id="mainContent">
                 <div class="table-responsive">
                     <table id="downloadsTable" class="table table-hover table-striped">
@@ -38,6 +39,24 @@
                     </table>
                 </div>
             </div>
+            <h2>Uploading</h2>
+            <div class="well well-lg" id="uploadContent">
+                <div class="table-responsive">
+                    <table id="uploadsTable" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Segments</th>
+                                <th>Size</th>
+                                <th>ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
 	{% endblock %}
 	{% block hiddencontent %}
 	      <!-- Modal -->
@@ -88,6 +107,16 @@
 
 		function uploadFiles(event)
 		{
+            if( $('#filename').get(0).files.length === 0 )
+            {
+                alert("Please select a file");
+                return false;
+            }
+            if( files.length === 0 )
+            {
+                alert("Please select a file");
+                return false;
+            }
 			event.stopPropagation();
 			event.preventDefault();
 
@@ -129,7 +158,7 @@
 						console.log(data);
 						for( i = 0; i < data.files.length; i++ )
 						{
-                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td><td>' + data.id + '</td></tr>');
+                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td><td>' + data.files[i].file_id + '</td></tr>');
 						}
 		                        }
 		                       else
