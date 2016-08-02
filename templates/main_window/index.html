@@ -32,6 +32,7 @@
                                 <th>Segments</th>
                                 <th>Size</th>
                                 <th>ID</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -144,7 +145,7 @@
 						console.log(data);
 						for( i = 0; i < data.files.length; i++ )
 						{
-                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td><td>' + data.files[i].file_id + '</td></tr>');
+                            $('#downloadsTable').append('<tr><td>' + data.files[i].basefilename + '</td><td>' + data.files[i].numsegments + '</td><td>' + formatBytes(data.files[i].totalbytes) + '</td><td>' + data.files[i].file_id + '</td><td><a href="/nzb/remove/' + data.files[i].file_id + '"><span style="color: red;">&#10007;</span></a></td></tr>');
 						}
 		                        }
 		                       else
