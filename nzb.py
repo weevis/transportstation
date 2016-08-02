@@ -4,7 +4,8 @@ from flask_wtf import Form
 from flask_wtf.file import FileField, FileAllowed
 import os
 import time
-from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify, json
+import json
+from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify
 from werkzeug.utils import secure_filename
 
 from app import app,db
@@ -51,7 +52,7 @@ def nzb():
         fs['files'] = filelist
         fs['success'] = True
     	fs['numfiles'] = i
-        jsondump = json.dumps(fs)
+        jsondump = fs
         nzbfile = NZBFile()
         id = nzbfile.addToWorkQueue(jsondump)
         fs['id'] = id
@@ -100,7 +101,7 @@ class NZBParse:
         self.nzbfile['basefilename'] = end_file
         self.nzbfile['finished'] = False
         self.nzbfile['added'] = time.time()
-        nz = NZBFiles(json.dumps(self.nzbfile))
+        nz = NZBFiles(self.nzbfile)
         db.session.add(nz)
         db.session.commit()
         self.nzbfile['file_id'] = nz.id
