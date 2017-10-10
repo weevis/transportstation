@@ -7,7 +7,7 @@ import time
 import json
 from flask import Blueprint, render_template, url_for, redirect, request, flash, current_app, jsonify
 from werkzeug.utils import secure_filename
-
+from sqlalchemy import func, Integer
 from app import app,db
 
 ALLOWED_EXTENSIONS = set(['nzb', 'torrent', 'magnet'])
@@ -29,6 +29,18 @@ def allowed_file(filename):
 def get_extension(filename):
     return filename.split('.',1)[1]
 
+@nzb_page.route('/remove/<int:id>', methods=['GET', 'POST'])
+def nzb_remove(id):
+    to_remove = id
+
+    files_subquery = db.session.query(func.json_array_elements(WorkQueue.field_data['files']).label('files')).subquery()
+    query = db.session.query(WorkQueue.id, WorkQueue.field_data, files_subquery.c.files).filter(files_subquery.c.files.op('->>')('file_id').cast(Integer) == id)
+
+    for q in query:
+        print q[0]
+
+    return jsonify({"success": True})
+
 @nzb_page.route('/nzb', methods=['GET', 'POST'])
 def nzb():
     filelist = []
@@ -49,6 +61,9 @@ def nzb():
                     filelist.append(json_obj)
                 if( extension == TORRENT or extension == MAGNET):
                     print "Torrent Found"
+            else:
+                    print "{} is not an allowed file".format(files.filename)
+
         fs['files'] = filelist
         fs['success'] = True
     	fs['numfiles'] = i

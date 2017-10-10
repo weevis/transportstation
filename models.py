@@ -9,7 +9,7 @@ class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     field_data = db.Column(JSON)
 
-    def __init__(self, field_data):
+    def __init__(self, field_data = None):
         self.field_data = field_data
 
 
@@ -19,7 +19,7 @@ class WorkQueue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     field_data = db.Column(JSON)
 
-    def __init__(self, field_data):
+    def __init__(self, field_data = None):
         self.field_data = field_data
 
 
@@ -29,6 +29,6 @@ class NZBFiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     field_data = db.Column(JSON)
 
-    def __init__(self, field_data):
+    def __init__(self, field_data = None):
         self.field_data = field_data
 
